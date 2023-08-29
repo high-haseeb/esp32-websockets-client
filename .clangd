@@ -1,0 +1,10 @@
+CompileFlags:
+  Add: [
+    -mlong-calls, 
+    -isysroot=/Users/tol/.espressif/tools/xtensa-esp32-elf/esp-2021r2-8.4.0/xtensa-esp32-elf,
+    -I/Users/justinsmestad/esp/esp-idf/components/**,
+    -I/Users/justinsmestad/.espressif/tools/xtensa-esp32-elf/esp-2020r3-8.4.0/xtensa-esp32-elf/include,
+    -I/Users/justinsmestad/.espressif/tools/xtensa-esp32-elf/esp-2020r3-8.4.0/xtensa-esp32-elf/xtensa-esp32-elf/include,
+    -I/Users/justinsmestad/.espressif/tools/xtensa-esp32-elf/esp-2020r3-8.4.0/xtensa-esp32-elf/xtensa-esp32-elf/include/c++/8.4.0/,
+  ]
+  Remove: [-fno-tree-switch-conversion, -mtext-section-literals, -mlongcalls, -fstrict-volatile-bitfields]
