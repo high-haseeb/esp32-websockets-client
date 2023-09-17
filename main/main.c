@@ -1,25 +1,25 @@
-#include "nvs_flash.h"
-#include "esp_websocket_client.h"
-#include <stdio.h>
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
 #include "driver/gpio.h"
 #include "esp_log.h"
-#include "led_strip.h"
+#include "esp_websocket_client.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "nvs_flash.h"
 #include "sdkconfig.h"
+#include "wifi_connection.h"
+#include <stdio.h>
 
-#define TAG "main"
-
-
-char *websocket_uri;
-void connect_websockets(void) {
-  sprintf(websocket_uri, "wss://ws-%s.pusher.com:443/app/%s", getenv("CLUSTER"),getenv("KEY"));
-
-  const esp_websocket_client_config_t ws_cfg = {
-      .uri = websocket_uri,
-  };
-}
+static const char *TAG = "main";
 #define LED 2
+
+// char *websocket_uri;
+void connect_websockets(void) {
+  ESP_LOGI(TAG, "wss://ws-%s.pusher.com:443/app/%s",
+  getenv("CLUSTER"),getenv("KEY"));
+  // const esp_websocket_client_config_t ws_cfg = {
+  //     .uri = websocket_uri,
+  // };
+}
+
 void blink(void) {
   gpio_reset_pin(LED);
   gpio_set_direction(LED, GPIO_MODE_OUTPUT);
@@ -30,7 +30,9 @@ void blink(void) {
     vTaskDelay(1000 / portTICK_PERIOD_MS);
   }
 }
+
 void app_main(void) {
+  // esp_log_level_set(TAG, ESP_LOG_INFO);
   // Initialize NVS (non-volatile storage) to store wifi config
   esp_err_t ret = nvs_flash_init(); // init nvs and retrieve status
   if (ret == ESP_ERR_NVS_NO_FREE_PAGES ||
@@ -40,5 +42,8 @@ void app_main(void) {
   }
   ESP_ERROR_CHECK(ret); // double checking error handling
 
-  ESP_LOGI(TAG, "ESP_WIFI_MODE_STA");
+  wifi_init_sta();
+  ESP_LOGI(TAG, "connected succesfully");
+  blink();
+  connect_websockets();
 }
